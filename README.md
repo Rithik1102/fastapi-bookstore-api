@@ -22,11 +22,18 @@ Before proceeding, ensure Python and pip are installed.
    python --version
    pip --version
 
-### **Linux/macOS**
-```sh
-  sudo apt install python3 python3-pip  # Ubuntu/Debian
-  sudo dnf install python3 python3-pip  # Fedora
-  brew install python                   # macOS (Homebrew)
+   
+#### Linux/macOS
+
+```bash
+# Ubuntu/Debian
+sudo apt install python3 python3-pip
+
+# Fedora
+sudo dnf install python3 python3-pip
+
+# macOS (Homebrew)
+brew install python
 
 
 Verify the installation
@@ -35,9 +42,9 @@ Verify the installation
 
 
 Clone the Repository
-  git clone https://github.com/ohangbon/fastapi-bookstore-api.git
-  
+  git clone https://github.com/ohangbonfastapi-bookstore-api.git
   cd fastapi-bookstore-api
+
 
 Set Up a Virtual Environment
 For Windows CMD/powershell
@@ -45,7 +52,7 @@ For Windows CMD/powershell
    venv\Scripts\activate
 
 
-For Linux/macOS:
+For Linux/macOS: Terminal
    python3 -m venv venv
    source venv/bin/activate
 
@@ -53,14 +60,17 @@ For Linux/macOS:
 Install Dependencies
    pip install -r requirements.txt
 
+
 Create a .env File
 After cloning the project, create a .env file in the root directory and add the following environment variables:
     SECRET_KEY=yC3j8p9aL2xR7v1qF5zK0m6eH4bI9uW1gT8sO2dJ6nQ3rA7kE5iX1fP4lZ9hV2
     ACCESS_TOKEN_EXPIRE_MINUTES=30
 
 
-run it
+run this command in either CMD/powershell/Terminal
    uvicorn main:app --reload
+
+
 
 API Usage
 🔹 Register a new user

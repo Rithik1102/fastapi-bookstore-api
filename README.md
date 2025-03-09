@@ -32,5 +32,53 @@ For Linux/macOS:
 Install Dependencies
    pip install -r requirements.txt
 
+Create a .env File
+After cloning the project, create a .env file in the root directory and add the following environment variables:
+    SECRET_KEY=yC3j8p9aL2xR7v1qF5zK0m6eH4bI9uW1gT8sO2dJ6nQ3rA7kE5iX1fP4lZ9hV2
+    ACCESS_TOKEN_EXPIRE_MINUTES=30
+
+
 run it
    uvicorn main:app --reload
+
+API Usage
+🔹 Register a new user
+curl -X 'POST' 'http://127.0.0.1:8000/register' \
+  -H 'Content-Type: application/json' \
+  -d '{"username": "testuser", "email": "test@example.com", "password": "testpass"}'
+
+
+🔹 Login and get a JWT token
+curl -X 'POST' 'http://127.0.0.1:8000/login' \
+  -H 'Content-Type: application/x-www-form-urlencoded' \
+  -d 'username=testuser&password=testpass'
+
+
+🔹 Create a new book (replace your_generated_jwt_token with the actual token)
+curl -X 'POST' 'http://127.0.0.1:8000/books' \
+  -H 'Authorization: Bearer your_generated_jwt_token' \
+  -H 'Content-Type: application/json' \
+  -d '{"title": "My First Book", "author": "John Doe"}'
+
+
+🔹 Get all books
+curl -X 'GET' 'http://127.0.0.1:8000/books' \
+  -H 'Authorization: Bearer your_generated_jwt_token'
+
+  
+🔹 Get a specific book
+curl -X 'GET' 'http://127.0.0.1:8000/books/1' \
+  -H 'Authorization: Bearer your_generated_jwt_token'
+
+
+🔹 Update a book
+curl -X 'PUT' 'http://127.0.0.1:8000/books/1' \
+  -H 'Authorization: Bearer your_generated_jwt_token' \
+  -H 'Content-Type: application/json' \
+  -d '{"title": "Updated Book Title", "author": "Jane Doe"}'
+
+
+
+🔹 Delete a book
+curl -X 'DELETE' 'http://127.0.0.1:8000/books/1' \
+  -H 'Authorization: Bearer your_generated_jwt_token'

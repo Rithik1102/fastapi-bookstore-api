@@ -17,7 +17,6 @@ It includes **user authentication**, **book CRUD operations**, and **JWT-based a
 Before proceeding, ensure Python and pip are installed.  
 
 #### **Windows**  
-```sh
 1. Download and install Python from [python.org](https://www.python.org/downloads/).  
 2. Verify the installation:  (open terminal)
    python --version

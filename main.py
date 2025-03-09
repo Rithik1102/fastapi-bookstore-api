@@ -1,31 +1,39 @@
-from fastapi import FastAPI, Depends, HTTPException
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-from sqlalchemy.orm import Session
-from database import SessionLocal, engine, Base
-from models import User, Book
-from schemas import UserCreate, BookCreate, BookResponse
-from passlib.context import CryptContext
-from jose import JWTError, jwt
+import os
 from datetime import datetime, timedelta
 from typing import List
 
+from dotenv import load_dotenv
+from fastapi import FastAPI, Depends, HTTPException
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from jose import JWTError, jwt
+from passlib.context import CryptContext
+from sqlalchemy.orm import Session
+
+from database import SessionLocal, engine, Base
+from models import User, Book
+from schemas import UserCreate, BookCreate, BookResponse
+
+# Load environment variables
+load_dotenv()
+
+# Initialize FastAPI app
 app = FastAPI()
 
-# Hashing passwords
+# Password hashing
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-# OAuth2 for token authentication
+# OAuth2 for authentication
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
-# JWT Config
-SECRET_KEY = "your_secret_key"
+# JWT Configuration
+SECRET_KEY = os.getenv("SECRET_KEY", "fallback_secret_key")
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", 30))
 
-# Create tables automatically on startup
+# Create tables on startup
 Base.metadata.create_all(bind=engine)
 
-# Dependency: Get DB session
+# Dependency to get the DB session
 def get_db():
     db = SessionLocal()
     try:
@@ -34,10 +42,10 @@ def get_db():
         db.close()
 
 # Function to authenticate user
-def authenticate_user(db, username: str, password: str):
+def authenticate_user(db: Session, username: str, password: str):
     user = db.query(User).filter(User.username == username).first()
     if not user or not pwd_context.verify(password, user.hashed_password):
-        return False
+        return None
     return user
 
 # Function to create JWT token
@@ -47,7 +55,7 @@ def create_access_token(data: dict, expires_delta: timedelta):
     to_encode.update({"exp": expire})
     return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 
-# Function to get the current authenticated user
+# Get the currently authenticated user
 def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
     credentials_exception = HTTPException(
         status_code=401,
@@ -66,7 +74,7 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
     except JWTError:
         raise credentials_exception
 
-# Register User
+# Register a new user
 @app.post("/register")
 def register_user(user: UserCreate, db: Session = Depends(get_db)):
     hashed_password = pwd_context.hash(user.password)
@@ -78,7 +86,7 @@ def register_user(user: UserCreate, db: Session = Depends(get_db)):
     
     return {"message": "User registered successfully"}
 
-# Login User
+# Login user and return JWT token
 @app.post("/login")
 def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     user = authenticate_user(db, form_data.username, form_data.password)
@@ -92,7 +100,7 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
     
     return {"access_token": access_token, "token_type": "bearer"}
 
-# Create Book
+# Create a new book
 @app.post("/books", response_model=BookResponse)
 def create_book(book: BookCreate, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     db_book = Book(title=book.title, author=book.author, owner_id=current_user.id)
@@ -101,12 +109,12 @@ def create_book(book: BookCreate, db: Session = Depends(get_db), current_user: U
     db.refresh(db_book)
     return db_book
 
-# Get All Books
+# Get all books of the current user
 @app.get("/books", response_model=List[BookResponse])
 def get_books(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     return db.query(Book).filter(Book.owner_id == current_user.id).all()
 
-# Get Book by ID
+# Get a specific book by ID
 @app.get("/books/{book_id}", response_model=BookResponse)
 def get_book(book_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     book = db.query(Book).filter(Book.id == book_id, Book.owner_id == current_user.id).first()
@@ -114,7 +122,7 @@ def get_book(book_id: int, db: Session = Depends(get_db), current_user: User = D
         raise HTTPException(status_code=404, detail="Book not found")
     return book
 
-# Update Book
+# Update a book
 @app.put("/books/{book_id}", response_model=BookResponse)
 def update_book(book_id: int, book_update: BookCreate, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     book = db.query(Book).filter(Book.id == book_id, Book.owner_id == current_user.id).first()
@@ -127,7 +135,7 @@ def update_book(book_id: int, book_update: BookCreate, db: Session = Depends(get
     db.refresh(book)
     return book
 
-# Delete Book
+# Delete a book
 @app.delete("/books/{book_id}")
 def delete_book(book_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     book = db.query(Book).filter(Book.id == book_id, Book.owner_id == current_user.id).first()

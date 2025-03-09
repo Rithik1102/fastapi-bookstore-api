@@ -13,26 +13,30 @@ It includes **user authentication**, **book CRUD operations**, and **JWT-based a
 
 ## 📥 Installation
 
-### 1️⃣ Install Python and pip  
+### 1️⃣Install Python and pip  
 Before proceeding, ensure Python and pip are installed.  
 
 #### **Windows**  
+```sh
 1. Download and install Python from [python.org](https://www.python.org/downloads/).  
 2. Verify the installation:  (open terminal)
    python --version
    pip --version
 
-Linux/macOS
+### **Linux/macOS**
+```sh
   sudo apt install python3 python3-pip  # Ubuntu/Debian
   sudo dnf install python3 python3-pip  # Fedora
   brew install python                   # macOS (Homebrew)
 
-Verify the installation:
+
+### **Verify the installation**
+```sh
   python3 --version
   pip3 --version
 
 
-### **1️⃣ Clone the Repository**
+### **Clone the Repository**
 ```sh
 git clone https://github.com/ohangbon/fastapi-bookstore-api.git
 cd fastapi-bookstore-api

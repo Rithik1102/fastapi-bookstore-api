@@ -11,7 +11,26 @@ It includes **user authentication**, **book CRUD operations**, and **JWT-based a
 
 ---
 
-## **📥 Installation**
+## 📥 Installation
+
+### 1️⃣ Install Python and pip  
+Before proceeding, ensure Python and pip are installed.  
+
+#### **Windows**  
+1. Download and install Python from [python.org](https://www.python.org/downloads/).  
+2. Verify the installation:  (open terminal)
+   python --version
+   pip --version
+
+Linux/macOS
+  sudo apt install python3 python3-pip  # Ubuntu/Debian
+  sudo dnf install python3 python3-pip  # Fedora
+  brew install python                   # macOS (Homebrew)
+
+Verify the installation:
+  python3 --version
+  pip3 --version
+
 
 ### **1️⃣ Clone the Repository**
 ```sh
@@ -82,3 +101,7 @@ curl -X 'PUT' 'http://127.0.0.1:8000/books/1' \
 🔹 Delete a book
 curl -X 'DELETE' 'http://127.0.0.1:8000/books/1' \
   -H 'Authorization: Bearer your_generated_jwt_token'
+
+
+
+

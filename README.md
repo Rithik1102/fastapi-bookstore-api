@@ -29,16 +29,15 @@ Before proceeding, ensure Python and pip are installed.
   brew install python                   # macOS (Homebrew)
 
 
-### **Verify the installation**
-```sh
+Verify the installation
   python3 --version
   pip3 --version
 
 
-### **Clone the Repository**
-```sh
-git clone https://github.com/ohangbon/fastapi-bookstore-api.git
-cd fastapi-bookstore-api
+Clone the Repository
+  git clone https://github.com/ohangbon/fastapi-bookstore-api.git
+  
+  cd fastapi-bookstore-api
 
 Set Up a Virtual Environment
 For Windows CMD/powershell

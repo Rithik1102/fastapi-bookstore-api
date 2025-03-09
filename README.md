@@ -67,7 +67,7 @@ brew install python
     ACCESS_TOKEN_EXPIRE_MINUTES=30
 
 
-#run this command in either CMD/powershell/Terminal
+#then to run the project run this command in either CMD/powershell/Terminal
    uvicorn main:app --reload
 
 

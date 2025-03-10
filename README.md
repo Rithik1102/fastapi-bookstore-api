@@ -73,6 +73,8 @@ brew install python
 
 
 #API Usage
+# Then, open Git Bash terminal to run the commands below.
+
 🔹 Register a new user
 curl -X 'POST' 'http://127.0.0.1:8000/register' \
   -H 'Content-Type: application/json' \

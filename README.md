@@ -43,6 +43,7 @@ brew install python
 
 #Clone the Repository
   git clone https://github.com/ohangbonfastapi-bookstore-api.git
+#enter the folder or open in code editor  
   cd fastapi-bookstore-api
 
 
@@ -73,7 +74,8 @@ brew install python
 
 
 #API Usage
-# Then, open Git Bash terminal to run the commands below.
+# Download and open Git Bash terminal for windows to run the commands below.
+# For Linux/macOS, open the terminal to run commands.
 
 🔹 Register a new user
 curl -X 'POST' 'http://127.0.0.1:8000/register' \

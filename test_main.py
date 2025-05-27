@@ -26,7 +26,7 @@ client = TestClient(app)
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
-def setup():
+def setup_module(module):
     Base.metadata.drop_all(bind=engine)  # Reset DB
     Base.metadata.create_all(bind=engine)  # Create tables
     

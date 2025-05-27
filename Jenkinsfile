@@ -48,11 +48,14 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Deploying application...'
-                // Example: build Docker image and run container
-                bat "docker build -t fastapi-bookstore-api:latest ."
-                bat "docker stop bookstore-container || echo 'No container running'"
-                bat "docker rm bookstore-container || echo 'No container to remove'"
-                bat "docker run -d -p 8000:8000 --name bookstore-container fastapi-bookstore-api:latest"
+                bat '''
+                docker build -t fastapi-bookstore-api:latest .
+
+                docker stop bookstore-container 2>nul || echo No container running
+                docker rm bookstore-container 2>nul || echo No container to remove
+
+                docker run -d -p 8000:8000 --name bookstore-container fastapi-bookstore-api:latest
+                '''
             }
         }
 

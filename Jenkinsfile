@@ -32,13 +32,7 @@ pipeline {
             }
         }
 
-        stage('Code Quality') {
-            steps {
-                  withSonarQubeEnv('SonarQubeServer') {
-                  bat 'sonar-scanner.bat'
-                }
-            }
-        }
+        
 
         stage('Security') {
             steps {

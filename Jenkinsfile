@@ -9,7 +9,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo "Setting up Python virtual environment..."
-                bat '"C:\\Users\\YourUser\\AppData\\Local\\Programs\\Python\\Python311\\python.exe" -m venv venv'
+                
                 bat ".\\%VENV_DIR%\\Scripts\\activate && pip install -r requirements.txt"
             }
         }

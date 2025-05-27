@@ -2,65 +2,92 @@ pipeline {
     agent any
 
     environment {
-        VENV_DIR = "venv"
+        // Ensure python and pip are in PATH, if not, add absolute path here
+        PYTHON = "python"  
+        PIP = "pip"
     }
 
     stages {
+        stage('Checkout') {
+            steps {
+                echo 'Checking out code...'
+                checkout scm
+            }
+        }
+
         stage('Build') {
             steps {
-                echo "Setting up Python virtual environment..."
-                
-                bat ".\\%VENV_DIR%\\Scripts\\activate && pip install -r requirements.txt"
+                echo 'Installing dependencies...'
+                bat "${env.PIP} install --upgrade pip"
+                bat "${env.PIP} install -r requirements.txt"
+                echo 'Build complete.'
             }
         }
 
         stage('Test') {
             steps {
-                echo "Running automated tests..."
-                bat ".\\%VENV_DIR%\\Scripts\\activate && pytest tests"
+                echo 'Running tests...'
+                // Run pytest, adjust if you use unittest or other test framework
+                bat "${env.PYTHON} -m pytest test_main.py"
             }
         }
 
         stage('Code Quality') {
             steps {
-                echo "Running flake8 for code quality..."
-                bat ".\\%VENV_DIR%\\Scripts\\activate && pip install flake8 && flake8 app"
+                echo 'Running SonarQube analysis...'
+                // Assuming SonarQube is configured in Jenkins
+                withSonarQubeEnv('SonarQubeServer') {
+                    bat "${env.PYTHON} -m pip install sonar-scanner"
+                    bat "sonar-scanner"
+                }
             }
         }
 
         stage('Security') {
             steps {
-                echo "Running Trivy scan on Docker image..."
-                bat "docker build -t fastapi-bookstore ."
-                bat "trivy image --severity HIGH,CRITICAL fastapi-bookstore"
+                echo 'Running security scan with Bandit...'
+                bat "${env.PIP} install bandit"
+                bat "bandit -r ."
             }
         }
 
         stage('Deploy') {
             steps {
-                echo "Deploying with Docker Compose..."
-                bat "docker-compose up -d"
+                echo 'Deploying application...'
+                // Example: build Docker image and run container
+                bat "docker build -t fastapi-bookstore-api:latest ."
+                bat "docker stop bookstore-container || echo 'No container running'"
+                bat "docker rm bookstore-container || echo 'No container to remove'"
+                bat "docker run -d -p 8000:8000 --name bookstore-container fastapi-bookstore-api:latest"
             }
         }
 
         stage('Release') {
             steps {
-                echo "Tagging release and pushing to Git..."
-                script {
-                    def version = "v1.${env.BUILD_NUMBER}"
-                    bat "git config --global user.email \"you@example.com\""
-                    bat "git config --global user.name \"Your Name\""
-                    bat "git tag ${version}"
-                    bat "git push origin ${version}"
-                }
+                echo 'Release stage: Tagging repository (example)'
+                bat 'git tag -a v1.0.${BUILD_NUMBER} -m "Release build ${BUILD_NUMBER}"'
+                bat 'git push origin --tags'
             }
         }
 
         stage('Monitoring') {
             steps {
-                echo "Health check endpoint..."
-                bat "curl http://localhost:8000/health || echo 'App not healthy!'"
+                echo 'Monitoring stage (example placeholder)'
+                // Configure monitoring/alerts as needed outside Jenkins or with plugins
             }
+        }
+    }
+
+    post {
+        always {
+            echo 'Cleaning workspace...'
+            cleanWs()
+        }
+        success {
+            echo 'Build succeeded!'
+        }
+        failure {
+            echo 'Build failed!'
         }
     }
 }

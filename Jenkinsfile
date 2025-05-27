@@ -34,11 +34,8 @@ pipeline {
 
         stage('Code Quality') {
             steps {
-                echo 'Running SonarQube analysis...'
-                // Assuming SonarQube is configured in Jenkins
-                withSonarQubeEnv('SonarQubeServer') {
-                    bat "${env.PYTHON} -m pip install sonar-scanner"
-                    bat "sonar-scanner"
+                  withSonarQubeEnv('SonarQubeServer') {
+                  bat 'sonar-scanner.bat'
                 }
             }
         }

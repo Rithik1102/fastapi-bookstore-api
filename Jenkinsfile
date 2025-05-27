@@ -36,7 +36,11 @@ pipeline {
 
         stage('Security') {
             steps {
-                bat '"C:\\Users\\rithi\\AppData\\Local\\Programs\\Python\\Python311\\Scripts\\bandit.exe" -r .'
+                bat '''
+                chcp 65001
+                "C:\\Users\\rithi\\AppData\\Local\\Programs\\Python\\Python311\\Scripts\\bandit.exe" -r . > bandit_report.txt
+                type bandit_report.txt
+                '''
             }
         }
 

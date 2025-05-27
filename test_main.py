@@ -39,7 +39,7 @@ def setup_module(module):
         db.add(test_user)
         db.commit()
 
-setup()
+
 
 
 def test_register_user():

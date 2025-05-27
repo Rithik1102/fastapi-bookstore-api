@@ -36,11 +36,10 @@ pipeline {
 
         stage('Security') {
             steps {
-                echo 'Running security scan with Bandit...'
-                bat "${env.PIP} install bandit"
-                bat "bandit -r ."
+                bat '"C:\\Users\\rithi\\AppData\\Local\\Programs\\Python\\Python311\\Scripts\\bandit.exe" -r .'
             }
         }
+
 
         stage('Deploy') {
             steps {

@@ -2,14 +2,14 @@ pipeline {
     agent any
 
     environment {
-        VENV_DIR = "venvr"
+        VENV_DIR = "venv"
     }
 
     stages {
         stage('Build') {
             steps {
                 echo "Setting up Python virtual environment..."
-                bat "python -m venv %VENV_DIR%"
+                bat '"C:\\Users\\YourUser\\AppData\\Local\\Programs\\Python\\Python311\\python.exe" -m venv venv'
                 bat ".\\%VENV_DIR%\\Scripts\\activate && pip install -r requirements.txt"
             }
         }

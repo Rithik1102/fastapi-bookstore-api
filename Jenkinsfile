@@ -3,8 +3,8 @@ pipeline {
 
     environment {
         // Ensure python and pip are in PATH, if not, add absolute path here
-        PYTHON = "C:\\Users\\<YourUser>\\AppData\\Local\\Programs\\Python\\Python311\\python.exe"
-        PIP = "C:\\Users\\<YourUser>\\AppData\\Local\\Programs\\Python\\Python311\\Scripts\\pip.exe"
+        PYTHON = "C:\\Users\\rithi\\AppData\\Local\\Programs\\Python\\Python311\\python.exe"
+        PIP = "C:\\Users\\rithi\\AppData\\Local\\Programs\\Python\\Python311\\Scripts\\pip.exe"
     }
 
     stages {
